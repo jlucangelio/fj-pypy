@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jorge Lucángeli Obes
+ * Copyright 2011 Jorge Lucangeli Obes
  *
  * This file is part of fj-llvm.
  *
@@ -43,7 +43,7 @@ tokens {
 }
 
 @header {
-# Copyright 2011 Jorge Lucángeli Obes
+# Copyright 2011 Jorge Lucangeli Obes
 #
 # This file is part of fj-llvm.
 #
