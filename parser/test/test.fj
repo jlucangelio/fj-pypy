@@ -1,0 +1,14 @@
+class C extends Object {
+	Object o;
+
+	C(Object o) {
+		super();
+		this.o = o;
+	}
+
+	Object o() {
+		return this.o;
+	}
+}
+
+new C(new Object()).o();
