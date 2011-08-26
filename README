@@ -1,1 +1,3 @@
-FJ interpreter using LLVM as the backend.
+FJ interpreter using PyPy as the backend.
+
+The interpreter is ready, now it needs to be PyPy-fied.
