@@ -1,4 +1,4 @@
-# $ANTLR 3.1.3 Mar 17, 2009 19:23:44 /home/tamsyn/code/fj-llvm/parser/fj.g 2011-07-20 19:55:42
+# $ANTLR 3.1.3 Mar 17, 2009 19:23:44 /home/tamsyn/code/fj-llvm/parser/fj.g 2011-08-26 12:54:15
 
 import sys
 from antlr3 import *
@@ -9,27 +9,44 @@ from antlr3.compat import set, frozenset
 HIDDEN = BaseRecognizer.HIDDEN
 
 # token types
+EMPTY_NAMES=21
 CLASS=13
 RBRACE=10
-LETTER=19
+LETTER=36
+EMPTY_VARS=22
 LBRACE=9
 NEW=18
-WHITESPACE=23
+WHITESPACE=40
 UNDERSCORE=12
 SEMICOLON=6
+FIELDS=26
+EXPRESSIONS=35
 EOF=-1
 LPAREN=7
-ANY_CHAR=21
+NAMES=27
+DOT_EXPRESSION=34
+ANY_CHAR=38
 RPAREN=8
-NAME=22
+NAME=39
+METHODS=31
+VARIABLE=28
 COMMA=5
-ASSIGN=11
-THIS=16
 RETURN=17
+THIS=16
+ASSIGN=11
+EMPTY_EXPS=23
+VARIABLES=29
+PROGRAM=19
+FIELD=25
 SUPER=15
-DIGIT=20
+DIGIT=37
 DOT=4
 EXTENDS=14
+INIT=24
+CONSTRUCTOR=20
+METHOD=30
+EXPRESSION=32
+BASE_EXPRESSION=33
 
 
 class fjLexer(Lexer):
@@ -439,7 +456,7 @@ class fjLexer(Lexer):
     def mLETTER(self, ):
 
         try:
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:67:3: ( 'a' .. 'z' | 'A' .. 'Z' )
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:87:3: ( 'a' .. 'z' | 'A' .. 'Z' )
             # /home/tamsyn/code/fj-llvm/parser/fj.g:
             pass 
             if (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
@@ -465,8 +482,8 @@ class fjLexer(Lexer):
     def mDIGIT(self, ):
 
         try:
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:74:3: ( '0' .. '9' )
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:75:3: '0' .. '9'
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:94:3: ( '0' .. '9' )
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:95:3: '0' .. '9'
             pass 
             self.matchRange(48, 57)
 
@@ -485,7 +502,7 @@ class fjLexer(Lexer):
     def mANY_CHAR(self, ):
 
         try:
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:80:3: ( LETTER | UNDERSCORE | DIGIT )
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:100:3: ( LETTER | UNDERSCORE | DIGIT )
             # /home/tamsyn/code/fj-llvm/parser/fj.g:
             pass 
             if (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
@@ -514,8 +531,8 @@ class fjLexer(Lexer):
             _type = NAME
             _channel = DEFAULT_CHANNEL
 
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:87:3: ( ( LETTER | UNDERSCORE ) ( ANY_CHAR )* )
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:88:3: ( LETTER | UNDERSCORE ) ( ANY_CHAR )*
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:107:3: ( ( LETTER | UNDERSCORE ) ( ANY_CHAR )* )
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:108:3: ( LETTER | UNDERSCORE ) ( ANY_CHAR )*
             pass 
             if (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -524,7 +541,7 @@ class fjLexer(Lexer):
                 self.recover(mse)
                 raise mse
 
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:92:3: ( ANY_CHAR )*
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:112:3: ( ANY_CHAR )*
             while True: #loop1
                 alt1 = 2
                 LA1_0 = self.input.LA(1)
@@ -534,7 +551,7 @@ class fjLexer(Lexer):
 
 
                 if alt1 == 1:
-                    # /home/tamsyn/code/fj-llvm/parser/fj.g:92:3: ANY_CHAR
+                    # /home/tamsyn/code/fj-llvm/parser/fj.g:112:3: ANY_CHAR
                     pass 
                     self.mANY_CHAR()
 
@@ -562,10 +579,10 @@ class fjLexer(Lexer):
             _type = WHITESPACE
             _channel = DEFAULT_CHANNEL
 
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:96:3: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:97:3: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:116:3: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:117:3: ( ' ' | '\\t' | '\\r' | '\\n' )+
             pass 
-            # /home/tamsyn/code/fj-llvm/parser/fj.g:97:3: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # /home/tamsyn/code/fj-llvm/parser/fj.g:117:3: ( ' ' | '\\t' | '\\r' | '\\n' )+
             cnt2 = 0
             while True: #loop2
                 alt2 = 2

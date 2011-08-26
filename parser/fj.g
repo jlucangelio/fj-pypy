@@ -22,6 +22,7 @@ options {
   language  = Python;
   output    = AST;
   backtrack = true;
+//  k        = 2;
 }
 
 tokens {
@@ -40,6 +41,25 @@ tokens {
   THIS       = 'this';
   RETURN     = 'return';
   NEW        = 'new';
+
+  // Imaginary tokens for AST construction
+  PROGRAM;
+  CONSTRUCTOR;
+  EMPTY_NAMES;
+  EMPTY_VARS;
+  EMPTY_EXPS;
+  INIT;
+  FIELD;
+  FIELDS;
+  NAMES;
+  VARIABLE;
+  VARIABLES;
+  METHOD;
+  METHODS;
+  EXPRESSION;
+  BASE_EXPRESSION;
+  DOT_EXPRESSION;
+  EXPRESSIONS;
 }
 
 @header {
@@ -109,87 +129,125 @@ WHITESPACE
 /********* PARSER *****************************************************/
 program
   :
-  classDefinition+ expression
+  classDefinition+ expression SEMICOLON
+    ->
+      ^(PROGRAM classDefinition+ expression)
   ;
 
 classDefinition
   :
-  CLASS NAME EXTENDS NAME LBRACE fields constructor methods RBRACE
+  CLASS cname=NAME EXTENDS pname=NAME LBRACE fields constructor methods RBRACE
+    ->
+      ^(CLASS $cname $pname fields constructor methods)
   ;
 
 fields
   :
   (field SEMICOLON)*
+    ->
+      ^(FIELDS field*)
   ;
 
 field
   :
-  NAME NAME
+  t=NAME n=NAME
+    ->
+      ^(FIELD $t $n)
   ;
 
 constructor
   :
-  NAME LPAREN vars RPAREN LBRACE SUPER LPAREN names RPAREN SEMICOLON inits RBRACE
+  cname=NAME LPAREN vs=vars RPAREN LBRACE SUPER LPAREN ns=names RPAREN SEMICOLON ins=inits RBRACE
+    ->
+      ^(CONSTRUCTOR $cname $vs $ns $ins)
   ;
 
 vars
   :
-  (var (COMMA var)*)?
+  var (COMMA var)*
+    ->
+      ^(VARIABLES var+)
+  |
+    -> EMPTY_VARS
   ;
 
 var
   :
-  NAME NAME
+  t=NAME n=NAME
+    ->
+      ^(VARIABLE $t $n)
   ;
 
 names
   :
-  (NAME COMMA)*
+  NAME (COMMA NAME)*
+    ->
+      ^(NAMES NAME+)
+  |
+    -> EMPTY_NAMES
   ;
 
 inits
   :
-  (init SEMICOLON)*
+  (init SEMICOLON!)*
   ;
 
 init
   :
-  THIS DOT NAME ASSIGN NAME
+  THIS DOT f=NAME ASSIGN v=NAME
+    ->
+      ^(INIT $f $v)
   ;
 
 methods
   :
   method*
+    ->
+      ^(METHODS method*)
   ;
 
 method
   :
-  NAME NAME LPAREN vars RPAREN LBRACE RETURN expression SEMICOLON RBRACE
+  type=NAME name=NAME LPAREN vs=vars RPAREN LBRACE RETURN exp=expression SEMICOLON RBRACE
+    ->
+      ^(METHOD $type $name $vs $exp)
   ;
 
 expression
   :
-  baseExpression
-  | dotExpression
-  ;
-
-dotExpression
-  :
-  (
-    baseExpression
-    | THIS
-  )
-  (DOT NAME parenExpressions?)+ // field or method call
+  baseExpression dotExpression*
+    ->
+      ^(EXPRESSION baseExpression dotExpression*)
+  | THIS dotExpression+
+    ->
+      ^(EXPRESSION THIS dotExpression+)
   ;
 
 baseExpression
   :
   NAME
-  | NEW NAME parenExpressions // new object
-  | LPAREN NAME RPAREN expression // cast
+    ->
+      ^(BASE_EXPRESSION NAME) // variable
+  | NEW NAME LPAREN expressions RPAREN
+    ->
+      ^(BASE_EXPRESSION NEW NAME expressions) // new object
+  | LPAREN NAME RPAREN expression
+    ->
+      ^(BASE_EXPRESSION NAME expression) // cast
   ;
 
-parenExpressions
+dotExpression
   :
-  LPAREN (expression (COMMA expression)*)? RPAREN
+  DOT NAME (LPAREN expressions RPAREN)? // field or method call
+    ->
+      ^(DOT_EXPRESSION NAME expressions?)
+  ;
+
+expressions
+  :
+  (expression (COMMA expression)*)
+    ->
+      ^(EXPRESSIONS expression+)
+  |
+    -> EMPTY_EXPS
   ;
