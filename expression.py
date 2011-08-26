@@ -1,4 +1,4 @@
-from obj import Object
+from obj import FJObject
 from util import debug_node
 
 EXP = "EXPRESSION"
@@ -48,7 +48,7 @@ class CastExpression(BaseExpression):
 
     def execute(self, ct, var_dict):
         obj = self.exp.execute()
-        res = Object(self.cname, obj.fields)
+        res = FJObject(self.cname, obj.fields)
         return res
 
 class FieldExpression(DotExpression):

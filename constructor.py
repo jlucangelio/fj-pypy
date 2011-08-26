@@ -1,4 +1,4 @@
-from obj import Object
+from obj import FJObject
 from util import typedNameListFromTrees, nameListFromTrees, initListFromTrees
 
 def constructorFromTree(class_name, root):
@@ -38,7 +38,7 @@ class Constructor(object):
 
 class ObjectConstructor(Constructor):
     def __init__(self):
-        super(ObjectConstructor, self).__init__("Object", "Object", [], [], [])
+        super(ObjectConstructor, self).__init__("FJObject", "FJObject", [], [], [])
     
     def call(self, ct, params):
-        return Object("Object", {})
+        return FJObject("FJObject", {})
