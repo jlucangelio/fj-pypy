@@ -1,5 +1,5 @@
 from constructor import constructorFromTree, ObjectConstructor
-from method import methodsFromTree
+from method import methods_from_tree
 from util import fieldsFromTree
 
 class InvalidTreeException(BaseException):
@@ -16,7 +16,11 @@ class Class(object):
         self.methods = methods
 
     def construct(self, ct, params):
+        # DEBUG
+        print "Class.construct", self.name
+        
         res = self.constructor.call(ct, params)
+        res.klass = self.name
         return res
 
     @staticmethod
@@ -39,7 +43,11 @@ class Class(object):
         print "fields", fields
         
         constructor = constructorFromTree(name, children[3])
-        methods = methodsFromTree(children[4])
+        methods = methods_from_tree(children[4])
+        
+        # DEBUG
+        print "methods", methods
+        
         return Class(parent, name, fields, constructor, methods)
 
-cobject = Class("Object", "Object", [], ObjectConstructor(), [])
+cobject = Class("Object", "Object", [], ObjectConstructor(), {})

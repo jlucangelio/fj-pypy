@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#
 # Copyright 2011 Jorge Lucangeli Obes
 #
 # This file is part of fj-llvm.
@@ -23,6 +25,10 @@ import antlr3.tree
 from parser.fjParser import fjParser
 from parser.fjLexer import fjLexer
 
+from klass import Class, cobject
+from expression import exp_from_tree
+from util import debug_node
+
 f = sys.argv[1]
 
 char_stream = antlr3.ANTLRFileStream(f)
@@ -31,3 +37,27 @@ tokens = antlr3.CommonTokenStream(lexer)
 parser = fjParser(tokens)
 
 r = parser.program()
+root = r.tree
+
+children = r.tree.getChildren()
+cds = children[:-1]
+e = children[-1]
+
+ct = {}
+
+for cd in cds:
+    klass = Class.fromTree(cd)
+    ct[klass.name] = klass
+
+# DEBUG
+print "EXEC:"
+debug_node(e)
+exp = exp_from_tree(e)
+
+# DEBUG
+print "CT", ct
+print "e", exp
+
+ct["Object"] = cobject
+var_dict = {}
+print exp.execute(ct, var_dict)
