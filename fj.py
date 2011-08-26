@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with fj-pypy. If not, see <http://www.gnu.org/licenses/>.
 
+# Main executable for fj-pypy.
+
 import sys
 
 import antlr3
@@ -25,7 +27,7 @@ import antlr3.tree
 from parser.fjParser import fjParser
 from parser.fjLexer import fjLexer
 
-from klass import Class, cobject
+from klass import Class, CObject
 from expression import exp_from_tree
 from util import debug_node
 
@@ -58,6 +60,6 @@ exp = exp_from_tree(e)
 print "CT", ct
 print "e", exp
 
-ct["Object"] = cobject
+ct["Object"] = CObject
 var_dict = {}
 print exp.execute(ct, var_dict)

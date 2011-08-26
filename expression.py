@@ -1,5 +1,27 @@
+# Copyright 2011 Jorge Lucangeli Obes
+#
+# This file is part of fj-pypy.
+#
+# fj-pypy is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# fj-pypy is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with fj-pypy. If not, see <http://www.gnu.org/licenses/>.
+
+# Expression objects represent FJ expressions.
+# Expressions appear both in methods and as the "main" part
+# of FJ programs.
+# Expressions can be executed, yielding an object which is the
+# result of the computation of the expression.
+
 from obj import FJObject
-from util import debug_node
 
 EXP = "EXPRESSION"
 EXPS = "EXPRESSIONS"

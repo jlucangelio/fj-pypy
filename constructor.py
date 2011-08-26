@@ -1,5 +1,30 @@
+# Copyright 2011 Jorge Lucangeli Obes
+#
+# This file is part of fj-pypy.
+#
+# fj-pypy is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# fj-pypy is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with fj-pypy. If not, see <http://www.gnu.org/licenses/>.
+
+# Constructor objects represent class constructors.
+# As constructors in FJ have a fixed structure,
+# they are not represented as ordinary methods.
+# Constructor objects call the constructor of the superclass,
+# and then assign the object fields.
+# The constructor for the Object class, ObjectConstructor,
+# is the only place where objects are created.
+
 from obj import FJObject
-from util import typedNameListFromTrees, nameListFromTrees, initListFromTrees
+from util import typed_name_list_from_trees, name_list_from_trees, init_list_from_trees
 
 def constructorFromTree(class_name, root):
     # ^(CONSTRUCTOR $cname $vs $ns $ins)
@@ -10,9 +35,9 @@ def constructorFromTree(class_name, root):
     print "Constructor.children", [child.text for child in children]
     
     name = children[0]
-    variables = typedNameListFromTrees(children[1].getChildren())
-    sargs = nameListFromTrees(children[2].getChildren())
-    inits = initListFromTrees(children[3:])
+    variables = typed_name_list_from_trees(children[1].getChildren())
+    sargs = name_list_from_trees(children[2].getChildren())
+    inits = init_list_from_trees(children[3:])
     return Constructor(class_name, name, variables, sargs, inits)
 
 class Constructor(object):
